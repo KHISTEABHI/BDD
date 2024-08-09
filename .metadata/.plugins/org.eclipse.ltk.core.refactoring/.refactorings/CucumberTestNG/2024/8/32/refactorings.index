@@ -2,3 +2,6 @@
 1723188676825	Rename package 'learnCucumberTestNG'
 1723189414410	Delete elements
 1723193809647	Rename field 'testCaseResultFolderPath'
+1723202145282	Rename method 'startReport'
+1723202221954	Rename method 'startTest'
+1723202277438	Rename method 'endTest'

@@ -41,35 +41,36 @@ public class Report_Extent extends DriverFactory {
 		}
 	}
 
-	public static void startReport() {
+	public static void initializeReport() {
+		screenshotNumber = 1;
 		Report_Extent.makeDirectoryForResults(SeleniumReusable.testCaseId);
-		Report_Extent.startTest();
+		Report_Extent.initializeTestEnvironment();
 	}
 
 	public static void takeScreenshot() {
-		TakesScreenshot screenshot = (TakesScreenshot) driver;
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		File sourceFile = screenshot.getScreenshotAs(OutputType.FILE);
-		String screenshotPath = "results" +  File.separator + testCaseResultFolderName + File.separator + "Screenshots";
-		File destinationFile = new File(testCaseResultFolderName+ File.separator +"results" + File.separator + "Screenshot_" + screenshotNumber++ + ".png");
-		latestScreenshotPath = screenshotPath+ File.separator + "Screenshot_" + (screenshotNumber - 1) + ".png";
-		try {
-			FileUtils.copyFile(sourceFile, destinationFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	    TakesScreenshot screenshot = (TakesScreenshot)getDriver() ;
+	    screenshotFolderPath = "results" + File.separator + testCaseResultFolderName + File.separator + "Screenshots";
+	    File screenshotFolder = new File(screenshotFolderPath);
+	    if (!screenshotFolder.exists()) {
+	        screenshotFolder.mkdirs();
+	    }
+	    String screenshotFileName = "Screenshot_" + screenshotNumber++ + ".png";
+	    File destinationFile = new File(screenshotFolderPath, screenshotFileName);
+	    File sourceFile = screenshot.getScreenshotAs(OutputType.FILE);
+	    try {
+	        FileUtils.copyFile(sourceFile, destinationFile);
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	    latestScreenshotPath = ".." + File.separator +"Screenshots" + File.separator + screenshotFileName;
 	}
 
-	public static void startTest() {
-		screenshotFolderPath = directoryName + File.separator + "Screenshots";
-		reportFolderPath = directoryName + File.separator + "html_Report";
-		report = new ExtentReports(reportFolderPath + File.separator + "ExtentReportResults.html", true);
-		test = report.startTest("ExtentDemo");
-//		test.log(LogStatus.PASS,"Test Passed");
+	public static void initializeTestEnvironment() {
+	    screenshotFolderPath = directoryName + File.separator + "Screenshots";
+	    reportFolderPath = directoryName + File.separator + "html_Report";
+	    new File(screenshotFolderPath).mkdirs();
+	    report = new ExtentReports(reportFolderPath + File.separator + "ExtentReportResults.html", true);
+	    test = report.startTest("ExtentDemo");
 	}
 
 	public static void logStatusReportAsPassed(String details) {
@@ -92,7 +93,7 @@ public class Report_Extent extends DriverFactory {
 		test.log(LogStatus.SKIP, details);
 	}
 
-	public static void endTest() {
+	public static void closeTestReport() {
 		report.endTest(test);
 		report.flush();
 		if (report != null) {
@@ -109,3 +110,17 @@ public class Report_Extent extends DriverFactory {
 	 * 
 	 */
 }
+
+
+
+
+
+
+//screenshotFolderPath = directoryName + File.separator + "Screenshots";
+//reportFolderPath = directoryName + File.separator + "html_Report";
+//report = new ExtentReports(reportFolderPath + File.separator + "ExtentReportResults.html", true);
+//test = report.startTest("ExtentDemo");
+//File directory = new File(screenshotFolderPath);
+//if (!directory.exists()) {
+//	directory.mkdirs();
+//}

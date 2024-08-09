@@ -24,7 +24,7 @@ public class SeleniumReusable extends Report_Extent{
 	public static String testCaseId ;
 
 	public static WebElement getElement(By locator) {
-		return driver.findElement(locator);
+		return getDriver().findElement(locator);
 	}
 
 	// Check if file is downloaded
@@ -55,7 +55,7 @@ public class SeleniumReusable extends Report_Extent{
 
 	// Clicks on the provided web element
 	public static void clickElement(WebElement element) {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 		wait.until(ExpectedConditions.elementToBeClickable(element));
 		element.click();
 	}
@@ -72,28 +72,28 @@ public class SeleniumReusable extends Report_Extent{
 
 	// Waits until the provided element is visible
 	public static void waitForElementVisible(WebElement element, Duration timeout) {
-		WebDriverWait wait = new WebDriverWait(driver, timeout);
+		WebDriverWait wait = new WebDriverWait(getDriver(), timeout);
 		wait.until(ExpectedConditions.visibilityOf(element));
 	}
 
 	// Opens a URL in the browser
 	public static void openURL(String url) {
-		driver.get(url);
+		getDriver().get(url);
 	}
 
 	// Closes the current browser window
 	public static void closeBrowser() {
-		driver.quit();
+		getDriver().quit();
 	}
 
 	// Switches to the provided frame within the page
 	public static void switchToFrame(WebElement frame) {
-		driver.switchTo().frame(frame);
+		getDriver().switchTo().frame(frame);
 	}
 
 	// Switches back to the default content
 	public static void switchToDefaultContent() {
-		driver.switchTo().defaultContent();
+		getDriver().switchTo().defaultContent();
 	}
 
 	// Captures a screenshot of the current browser window
@@ -103,47 +103,47 @@ public class SeleniumReusable extends Report_Extent{
 
 	// Asserts that the provided element is present on the page
 	public static void assertElementPresent(WebElement element) {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 		wait.until(ExpectedConditions.visibilityOf(element));
 	}
 
 	// Asserts that the page title matches the expected title
 	public static void assertTitle(String expectedTitle) {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 		wait.until(ExpectedConditions.titleIs(expectedTitle));
 	}
 
 	// Switches to a window with the provided handle
 	public static void switchToWindow(String windowHandle) {
-		driver.switchTo().window(windowHandle);
+		getDriver().switchTo().window(windowHandle);
 	}
 
 	// Closes all windows except the main window
 	public static void closeAllWindowsExceptMain() {
-		String mainWindowHandle = driver.getWindowHandle();
-		Set<String> windowHandles = driver.getWindowHandles();
+		String mainWindowHandle = getDriver().getWindowHandle();
+		Set<String> windowHandles = getDriver().getWindowHandles();
 		for (String handle : windowHandles) {
 			if (!handle.equals(mainWindowHandle)) {
-				driver.switchTo().window(handle);
-				driver.close();
+				getDriver().switchTo().window(handle);
+				getDriver().close();
 			}
 		}
-		driver.switchTo().window(mainWindowHandle);
+		getDriver().switchTo().window(mainWindowHandle);
 	}
 
 	// Navigates back to the previous page
 	public static void navigateBack() {
-		driver.navigate().back();
+		getDriver().navigate().back();
 	}
 
 	// Refreshes the current page
 	public static void refreshPage() {
-		driver.navigate().refresh();
+		getDriver().navigate().refresh();
 	}
 
 	// Executes JavaScript code in the current context
 	public static void executeJavaScript(String script) {
-		((JavascriptExecutor) driver).executeScript(script);
+		((JavascriptExecutor) getDriver()).executeScript(script);
 	}
 
 	public static void assertElementPresent(By locator) {
@@ -169,54 +169,54 @@ public class SeleniumReusable extends Report_Extent{
 
 	public static void clickElement(By locator, String nameOfElement) {
 		WebElement element = getElement(locator);
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
 		wait.until(ExpectedConditions.elementToBeClickable(element));
 		element.click();
 		logStatusReportAsInfo("Click on '"+nameOfElement+"'");
 	}
 	
 	public static void moveToElement(By locator) {
-		Actions actions = new Actions(driver);
-		actions.moveToElement(driver.findElement(locator)).build().perform();
+		Actions actions = new Actions(getDriver());
+		actions.moveToElement(getDriver().findElement(locator)).build().perform();
 	}
 
 	public static void clickElementAction(By locator) {
 		SeleniumReusable.waitForElementVisible(SeleniumReusable.getElement(locator), Duration.ofSeconds(5));
-		Actions actions = new Actions(driver);
-		actions.moveToElement(driver.findElement(locator)).build().perform();
-		actions.click(driver.findElement(locator)).build().perform();
+		Actions actions = new Actions(getDriver());
+		actions.moveToElement(getDriver().findElement(locator)).build().perform();
+		actions.click(getDriver().findElement(locator)).build().perform();
 	}
 
 	public static void clickAndHoldElement(By locator) {
-		Actions actions = new Actions(driver);
-		actions.clickAndHold(driver.findElement(locator)).build().perform();
+		Actions actions = new Actions(getDriver());
+		actions.clickAndHold(getDriver().findElement(locator)).build().perform();
 	}
 
 	public static void releaseElement(By locator) {
-		Actions actions = new Actions(driver);
-		actions.release(driver.findElement(locator)).build().perform();
+		Actions actions = new Actions(getDriver());
+		actions.release(getDriver().findElement(locator)).build().perform();
 	}
 
 	public static void doubleClickElement(By locator) {
-		Actions actions = new Actions(driver);
-		actions.doubleClick(driver.findElement(locator)).build().perform();
+		Actions actions = new Actions(getDriver());
+		actions.doubleClick(getDriver().findElement(locator)).build().perform();
 	}
 
 	public static void contextClickElement(By locator) {
-		Actions actions = new Actions(driver);
-		actions.contextClick(driver.findElement(locator)).build().perform();
+		Actions actions = new Actions(getDriver());
+		actions.contextClick(getDriver().findElement(locator)).build().perform();
 	}
 
 	public static void dragAndDropElement(By sourceLocator, By targetLocator) {
-		Actions actions = new Actions(driver);
-		actions.dragAndDrop(driver.findElement(sourceLocator), driver.findElement(targetLocator)).build().perform();
+		Actions actions = new Actions(getDriver());
+		actions.dragAndDrop(getDriver().findElement(sourceLocator), getDriver().findElement(targetLocator)).build().perform();
 	}
 
 	public static void sendKeysToElement(By locator, String text, String nameOfElement) {
-		//Actions actions = new Actions(driver);
-//		actions.sendKeys(driver.findElement(locator), text).build().perform();
-		driver.findElement(locator).clear();
-		driver.findElement(locator).sendKeys(text);
+		//Actions actions = new Actions(getDriver());
+//		actions.sendKeys(getDriver().findElement(locator), text).build().perform();
+		getDriver().findElement(locator).clear();
+		getDriver().findElement(locator).sendKeys(text);
 		logStatusReportAsInfo("Enter "+"'"+text+"'"+" in "+nameOfElement);
 	}
 }

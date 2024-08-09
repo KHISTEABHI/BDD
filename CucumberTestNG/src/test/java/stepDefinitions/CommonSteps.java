@@ -13,13 +13,13 @@ public class CommonSteps extends Report_Extent{
 		String tag = scenario.getName();
 		SeleniumReusable.testCaseId = tag.substring(tag.indexOf('#')+1, tag.length());
 		launchBrowser();
-		startReport();
+		initializeReport();
 	}
 	
 	@After
 	public void endSession() {
 		quitDriver();
-		endTest();
+		closeTestReport();
 	}
 
 }
