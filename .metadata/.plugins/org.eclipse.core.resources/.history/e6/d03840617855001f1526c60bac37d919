@@ -1,0 +1,28 @@
+package stepDefinitions;
+
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import pageMethods.PM_LoginPage;
+import selenium.SeleniumReusable;
+
+public class SD_LoginPage extends PM_LoginPage{
+
+	@Given("User login to the application {string}")
+	public void user_have_code_and_feature_file(String testCaseId) {
+		SeleniumReusable.testCaseId = testCaseId;
+		clickOnLoginLink();
+		entersUserName(testCaseId);
+		entersPassword(testCaseId);
+		clicksOnLoginButton();
+	}
+	@When("user clicks on run button")
+	public void user_clicks_on_run_button() {
+		System.out.println("In : user clicks on run button");
+
+	}
+	@Then("the program will execute")
+	public void the_program_will_execute() {
+		System.out.println("In : the program will execute");
+	}
+}

@@ -1,0 +1,12 @@
+browser=edge
+DownloadPath=
+DeleteCookies=Yes
+ClosePreviousEdgeBrowserInstance=Yes
+ImplicitWait=25
+URL=SeleniumPractice
+SeleniumPractice=https://www.demoblaze.com/index.html
+LocalFile=file:///C:/Users/abhishekt/Documents
+TestDataSheetPath=/src/test/resources/sheets/TestData.xlsx
+UserName=Admin
+Password=admin123
+ResultPath=C:/Users/abhishekt/Documents/results

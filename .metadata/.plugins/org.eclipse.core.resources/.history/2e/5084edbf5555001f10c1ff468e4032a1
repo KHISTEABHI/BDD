@@ -1,0 +1,23 @@
+package learnCucumberTestNG.learnCucumberTestNG;
+
+
+
+@CucumberOptions(tags = "@Test1", // Specifies tags to include or exclude scenarios. You can use logical AND, OR, and NOT operators.
+		features = "featureFiles", // Specifies the path to the feature files
+		glue = "stepDefinitions", // Specifies the package containing the step definitions and hooks
+		plugin = { "pretty", 
+				"html:target/cucumber-reports/cucumber.html", 
+				"json:target/cucumber-reports/cucumber.json",
+				"junit:target/cucumber-reports/cucumber.xml" }, // Specifies plugins to generate reports in differentformats.
+		monochrome = true, // If set to true, it makes the console output more readable by removing ANSI colors.
+		dryRun = false // If set to true, Cucumber will check the steps' definitions without actually running them.
+
+)
+
+
+public class RunCucumberTest {
+	
+	/*
+	 * public static void main(String[] args) { System.out.println(1); }
+	 */
+}

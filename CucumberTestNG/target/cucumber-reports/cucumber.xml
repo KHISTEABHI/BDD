@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Cucumber" time="56.898" tests="2" skipped="0" failures="0" errors="0">
+<testcase classname="feature1" name="Login #Login to application - Example #1.1" time="29.439">
+<system-out><![CDATA[
+Given User login to the application.........................................passed
+]]></system-out>
+</testcase>
+<testcase classname="feature1" name="Login #Login to application - Example #1.1" time="27.306">
+<system-out><![CDATA[
+Given User login to the application.........................................passed
+]]></system-out>
+</testcase>
+</testsuite>

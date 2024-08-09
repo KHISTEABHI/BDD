@@ -1,0 +1,11 @@
+package pageObjects;
+
+import org.openqa.selenium.By;
+
+public interface PO_LoginPage {
+	
+	By loginLink = By.id("login2");
+	
+	
+
+}

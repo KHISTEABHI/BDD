@@ -1,0 +1,29 @@
+package stepDefinitions;
+
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+
+public class SD_LoginPage {
+
+	
+	@Given("User is on login page of an application")
+	public void user_is_on_login_page_of_an_application() {
+	    System.out.println("We have started");
+	}
+
+	@When("test executes")
+	public void test_executes() {
+	    System.out.println("Test case executing");
+	}
+
+	@When("result shows")
+	public void result_shows() {
+	    System.out.println("Have a great party");
+	}
+
+	@Then("User will drink old monk with happiness")
+	public void user_will_drink_old_monk_with_happiness() {
+		System.out.println("Cheers");
+	}
+}

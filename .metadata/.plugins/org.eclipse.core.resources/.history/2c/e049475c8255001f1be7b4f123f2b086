@@ -1,0 +1,107 @@
+package report;
+
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.testng.annotations.AfterTest;
+
+import com.relevantcodes.extentreports.ExtentReports;
+import com.relevantcodes.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.LogStatus;
+
+import selenium.DriverFactory;
+import selenium.SeleniumReusable;
+import utility.DateUtility;
+import utility.PropertiesFileUtility;
+import utility.RandomDataGenerator;
+
+public class Report_Extent extends DriverFactory{
+
+	public static ExtentTest test;
+	public static ExtentReports report;
+	public static String directoryName;
+	public static String screenshotFolderPath;
+	public static String reportFolderPath;
+	public static int screenshotNumber = 1;
+	public static String latestScreenshotPath = screenshotFolderPath+ File.separator + "Screenshot_"+ screenshotNumber;
+
+	public static void makeDirectoryForResults(String testCaseId) {
+		directoryName = PropertiesFileUtility.getValue("ResultPath") + File.separator + testCaseId + "_" + DateUtility.generateTimeStamp()
+				+ "_" + RandomDataGenerator.generateThreeDigitUniqueValue();
+		File directory = new File(directoryName);
+		if (!directory.exists()) {
+			directory.mkdirs(); // Create directories if they don't exist
+		}
+	}
+
+	public static void startReport() {
+		Report_Extent.makeDirectoryForResults(SeleniumReusable.testCaseId);
+		Report_Extent.startTest();
+	}
+	
+	public static void takeScreenshot() {
+		TakesScreenshot screenshot = (TakesScreenshot) driver;
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		File sourceFile = screenshot.getScreenshotAs(OutputType.FILE);
+		File destinationFile = new File(screenshotFolderPath + File.separator + "Screenshot_" + screenshotNumber++ + ".png");
+		latestScreenshotPath = screenshotFolderPath+ File.separator + "Screenshot_"+ screenshotNumber + ".png";
+		try {
+			FileUtils.copyFile(sourceFile, destinationFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void startTest() {
+		screenshotFolderPath = directoryName + File.separator + "Screenshots";
+		reportFolderPath = directoryName + File.separator + "html_Report";
+		report = new ExtentReports(reportFolderPath + File.separator + "ExtentReportResults.html", true);
+		test = report.startTest("ExtentDemo");
+//		test.log(LogStatus.PASS,"Test Passed");
+	}
+	
+	public static void logStatusReportAsPassed(String details) {
+		takeScreenshot();
+		test.log(LogStatus.PASS, details, test.addScreenCapture(latestScreenshotPath));
+	}
+	
+	public static void logStatusReportAsFailed(String details) {
+		takeScreenshot();
+		test.log(LogStatus.FAIL, details);
+	}
+	
+	public static void logStatusReportAsInfo(String details) {
+		takeScreenshot();
+		test.log(LogStatus.INFO, details, test.addScreenCapture(latestScreenshotPath));
+	}
+
+	public static void logStatusReportAsSkip(String details) {
+		takeScreenshot();
+		test.log(LogStatus.SKIP, details);
+	}
+	
+	public static void endTest() {
+		report.endTest(test);
+		report.flush();
+		if (report != null) {
+			report = null;
+			test = null;
+		}
+	}
+
+	/*
+	 * reports.endTest(); 
+	 * test.log(LogStatus.PASS,"Test Passed");
+	 * test.log(LogStatus.FAIL,"Test Failed");
+	 * test.log(LogStatus.SKIP,"Test Skipped");
+	 * test.log(LogStatus.INFO,"Test Info");
+	 * 
+	 */
+}

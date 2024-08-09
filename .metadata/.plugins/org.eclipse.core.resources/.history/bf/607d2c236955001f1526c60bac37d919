@@ -1,0 +1,21 @@
+package stepDefinitions;
+
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+
+public class SD_LoginPage {
+
+	@Given("user have code and feature file")
+	public void user_have_code_and_feature_file() {
+		System.out.println("In : user have code and feature file");
+	}
+	@When("user clicks on run button")
+	public void user_clicks_on_run_button() {
+		System.out.println("In : user clicks on run button");
+
+	}
+	@Then("the program will execute")
+	public void the_program_will_execute() {
+		System.out.println("In : the program will execute");
+}

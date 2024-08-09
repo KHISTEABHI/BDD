@@ -1,0 +1,10 @@
+Feature: feature1
+
+  @Test1
+  Scenario: User is on login page "<testCaseId>"
+    Given user have code and feature file
+
+
+ Examples:
+|				testCaseId			|
+|	Login to application	|

@@ -1,0 +1,14 @@
+package stepDefinitions;
+
+import io.cucumber.java.Before;
+import report.Report_Extent;
+import selenium.SeleniumReusable;
+
+public class CommonSteps extends Report_Extent{
+	
+	@Before
+	public void startBrowser() {
+		launchBrowser(SeleniumReusable.testCaseId);
+	}
+
+}

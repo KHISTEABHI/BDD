@@ -1,0 +1,88 @@
+package selenium;
+
+import java.io.IOException;
+import java.time.Duration;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+import report.Report_Extent;
+import utility.PropertiesFileUtility;
+
+public class DriverFactory {
+
+	public static WebDriver driver;
+	public static int implicitWaitInSeconds = Integer.parseInt(PropertiesFileUtility.getValue("ImplicitWait"));
+	public static String url = PropertiesFileUtility.getValue(PropertiesFileUtility.getValue("URL"));
+
+	public static WebDriver getDriver() {
+		return driver;
+	}
+
+	public static WebDriver launchBrowser() {
+		SeleniumReusable.testCaseId = testCaseId;
+		String browser = PropertiesFileUtility.getValue("browser");
+		if (driver == null) {
+			switch (browser) {
+			case "chrome":
+				driver = new ChromeDriver();
+				driver.manage().deleteAllCookies();
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitWaitInSeconds));
+				driver.manage().window().maximize();
+				driver.get(url);
+				break;
+			case "fireFox":
+				driver = new FirefoxDriver();
+				driver.manage().deleteAllCookies();
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitWaitInSeconds));
+				driver.manage().window().maximize();
+				driver.get(url);
+				break;
+			case "edge":
+				if (PropertiesFileUtility.getValue("ClosePreviousEdgeBrowserInstance").equalsIgnoreCase("Yes")) {
+					closeEdgeBrowser();
+				}
+				driver = new EdgeDriver();
+				if (PropertiesFileUtility.getValue("DeleteCookies").equalsIgnoreCase("Yes"))
+					driver.manage().deleteAllCookies();
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitWaitInSeconds));
+				driver.manage().window().maximize();
+				driver.get(url);
+				try {
+					Thread.sleep(4000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				SeleniumReusable.refreshPage();
+				break;
+			default:
+				throw new IllegalArgumentException("Unsupported browser: " + browser);
+			}
+		}
+		return driver;
+	}
+
+	public static void closeEdgeBrowser() {
+		try {
+			Runtime.getRuntime().exec("taskkill /F /IM msedge.exe /T");
+			Runtime.getRuntime().exec("taskkill /F /IM msedgedriver.exe /T");
+			System.out.println("All Edge browser instances closed successfully.");
+			Thread.sleep(7000);
+			Runtime.getRuntime().exec("cmd /c start cmd.exe /c \"del /s/f/q %temp%\\*\"");
+			System.out.println("Deleted temp files");
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void quitDriver() {
+		if (driver != null) {
+			driver.quit();
+			driver = null;
+		}
+	}
+}

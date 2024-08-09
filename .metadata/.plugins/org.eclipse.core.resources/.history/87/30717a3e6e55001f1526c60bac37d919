@@ -1,0 +1,24 @@
+package pageMethods;
+
+import pageObjects.PO_LoginPage;
+import report.Report_Extent;
+import selenium.SeleniumReusable;
+
+public class PM_LoginPage extends Report_Extent implements PO_LoginPage{
+
+	public void userClickOnLoginLink() {
+		SeleniumReusable.clickElement(login_link);
+	}
+	
+	public void userEntersUserName(String userName) {
+		SeleniumReusable.sendKeysToElement(userName_textField, userName);
+	}
+	
+	public void userEntersPassword(String password) {
+		SeleniumReusable.sendKeysToElement(password_textField, password);
+	}
+	
+	public void userClicksOnLoginButton(String userName) {
+		SeleniumReusable.clickElement(login_button);
+	}
+}

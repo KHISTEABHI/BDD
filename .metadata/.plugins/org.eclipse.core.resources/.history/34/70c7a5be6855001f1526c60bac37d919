@@ -1,0 +1,9 @@
+Feature: feature1
+
+  @tag1
+  Scenario: Lets run a test case
+    Given user have code and feature file
+    When user clicks on run button
+    Then the program will execute
+
+ 

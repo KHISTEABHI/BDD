@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="org.openqa.selenium.WebDriver"/>
+    <fullyQualifiedTypeName name="java.time.Duration"/>
+    <fullyQualifiedTypeName name="org.testng.Assert"/>
+    <fullyQualifiedTypeName name="org.apache.commons.io.FileUtils"/>
+    <fullyQualifiedTypeName name="org.openqa.selenium.OutputType"/>
+    <fullyQualifiedTypeName name="io.selenium.DriverFactory"/>
+    <fullyQualifiedTypeName name="otherUtility.RandomDataGenerator"/>
+    <fullyQualifiedTypeName name="java.util.Date"/>
+    <fullyQualifiedTypeName name="otherUtility.DateUtility"/>
+    <fullyQualifiedTypeName name="otherUtility.PropertiesFileUtility"/>
+    <fullyQualifiedTypeName name="org.apache.poi.sl.usermodel.Sheet"/>
+    <fullyQualifiedTypeName name="org.apache.poi.ss.usermodel.Cell"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="io.cucumber.testng.CucumberOptions"/>
+    <fullyQualifiedTypeName name="org.testng.annotations.Test"/>
+    <fullyQualifiedTypeName name="io.cucumber.testng.AbstractTestNGCucumberTests"/>
+    <fullyQualifiedTypeName name="selenium.SeleniumUtility"/>
+    <fullyQualifiedTypeName name="org.openqa.selenium.By"/>
+    <fullyQualifiedTypeName name="pageObjects.PO_LoginPage"/>
+    <fullyQualifiedTypeName name="org.openqa.selenium.devtools.SeleniumCdpConnection"/>
+    <fullyQualifiedTypeName name="pageMethods.PM_LoginPage"/>
+    <fullyQualifiedTypeName name="utility.ExcelUtility"/>
+    <fullyQualifiedTypeName name="report.Report_Extent"/>
+    <fullyQualifiedTypeName name="io.cucumber.java.Scenario"/>
+    <fullyQualifiedTypeName name="selenium.SeleniumReusable"/>
+</qualifiedTypeNameHistroy>

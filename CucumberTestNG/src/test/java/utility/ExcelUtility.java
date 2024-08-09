@@ -1,0 +1,184 @@
+package utility;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import report.Report_Extent;
+import selenium.SeleniumReusable;
+
+public class ExcelUtility extends Report_Extent{
+
+	public XSSFWorkbook currentWorkbook = null;
+	public XSSFSheet currentSheet = null;
+	public int lastPhysicalColumnNumber = -1;
+	public static String TestCaseId = SeleniumReusable.testCaseId;;
+	public HashMap<String, Integer> currentSheetHederRowColumnIndex = null;
+	public HashMap<String, String> currentTestCaseTestDataInTestDataSheet = null;
+	
+	public String getDataFromTestDataSheetForCurrentTestCase(String columnName) {
+		String columnValue = null;
+		if(currentTestCaseTestDataInTestDataSheet==null || !currentTestCaseTestDataInTestDataSheet.get("TestCase_id").equals(SeleniumReusable.testCaseId)) {
+			String testDataFilePath = System.getProperty("user.dir").replace("\\", "/")+PropertiesFileUtility.getValue("TestDataSheetPath");
+			System.out.println("   Test data file path : "+testDataFilePath);
+			columnValue = null;
+			try {
+				FileInputStream fis = new FileInputStream(testDataFilePath);
+				currentWorkbook = new XSSFWorkbook(fis);
+				currentSheet = currentWorkbook.getSheet("Sheet1");
+				getColumnNameAndIndex();
+				getTestDataOfCurrentTestCase();
+				columnValue = currentTestCaseTestDataInTestDataSheet.get(columnName);
+			}catch (FileNotFoundException e) {
+				System.err.println("Test data file not found");
+				e.printStackTrace();
+			}catch(IOException e){
+				e.printStackTrace();
+			}
+		}else {
+			columnValue = currentTestCaseTestDataInTestDataSheet.get(columnName);
+		}
+		return columnValue;
+	}
+	
+	public HashMap<String, String> getTestDataOfCurrentTestCase(){
+		int lastRowNum = currentSheet.getPhysicalNumberOfRows();
+		currentTestCaseTestDataInTestDataSheet = new HashMap<String, String>();
+		int testCaseRowNum = -1;
+		XSSFRow row ;
+		for(int idx = 1 ; idx < lastRowNum ; idx++) {
+			row = currentSheet.getRow(idx);
+			if(row.getCell(0).getStringCellValue().equals(SeleniumReusable.testCaseId)) {
+				testCaseRowNum = idx;
+				lastPhysicalColumnNumber = currentSheet.getRow(0).getPhysicalNumberOfCells();
+				for(int idx2 = 0 ; idx2 < lastPhysicalColumnNumber ; idx2++) {
+					Row currentRow = currentSheet.getRow(testCaseRowNum);
+					currentTestCaseTestDataInTestDataSheet.put(currentSheet.getRow(0).getCell(idx2).getStringCellValue(), getCellValueAsString(currentRow.getCell(idx2)));
+				}
+			}
+		}
+		System.out.println("   Test data for current test case : "+currentTestCaseTestDataInTestDataSheet);
+		return currentTestCaseTestDataInTestDataSheet;
+	}
+	
+	public HashMap<String, Integer> getColumnNameAndIndex(){
+		lastPhysicalColumnNumber = currentSheet.getRow(0).getPhysicalNumberOfCells();
+		currentSheetHederRowColumnIndex = new HashMap<String, Integer>();
+		for(int idx = 0 ; idx < lastPhysicalColumnNumber ; idx++) {
+			Row currentRow = currentSheet.getRow(0);
+			currentSheetHederRowColumnIndex.put(currentRow.getCell(idx).getStringCellValue(), idx);
+		}
+		return currentSheetHederRowColumnIndex;
+		
+	}
+	
+	
+	
+	
+    public Object[][] readExcel(String filePath) throws IOException {
+        FileInputStream inputStream = null;
+        Workbook workbook = null;
+
+        try {
+            inputStream = new FileInputStream(new File(filePath));
+            workbook = WorkbookFactory.create(inputStream);
+            Sheet sheet = workbook.getSheetAt(0);
+
+            int rows = sheet.getPhysicalNumberOfRows();
+            int cols = sheet.getRow(0).getPhysicalNumberOfCells();
+            Object[][] data = new Object[rows][cols];
+
+            for (int i = 0; i < rows; i++) {
+                Row row = sheet.getRow(i);
+                for (int j = 0; j < cols; j++) {
+                    Cell cell = row.getCell(j);
+                    data[i][j] = getCellValueAsString(cell);
+                }
+            }
+
+            return data;
+        } finally {
+            if (workbook != null) {
+                workbook.close();
+            }
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+    }
+
+    private String getCellValueAsString(Cell cell) {
+        if (cell == null) {
+            return "null";
+        }
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getStringCellValue();
+            case NUMERIC:
+                return String.valueOf(cell.getNumericCellValue());
+            case BOOLEAN:
+                return String.valueOf(cell.getBooleanCellValue());
+            case FORMULA:
+                return cell.getCellFormula();
+            default:
+                return "";
+        }
+    }
+
+    public void writeExcel(String filePath, Object[][] data) throws IOException {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Sheet1");
+
+        for (int i = 0; i < data.length; i++) {
+            Row row = sheet.createRow(i);
+            for (int j = 0; j < data[i].length; j++) {
+                Cell cell = row.createCell(j);
+                cell.setCellValue(data[i][j].toString());
+            }
+        }
+
+        FileOutputStream outputStream = new FileOutputStream(filePath);
+        workbook.write(outputStream);
+        workbook.close();
+        outputStream.close();
+    }	
+    
+    public String getCellValueAsString(Sheet sheet, int rowIndex, int columnIndex) {
+        Row row = sheet.getRow(rowIndex);
+        Cell cell = row.getCell(columnIndex);
+        return getCellValueAsString(cell);
+    }
+
+    public void setCellValue(Sheet sheet, int rowIndex, int columnIndex, Object value) {
+        Row row = sheet.getRow(rowIndex);
+        if (row == null) {
+            row = sheet.createRow(rowIndex);
+        }
+        Cell cell = row.createCell(columnIndex);
+        if (value instanceof String) {
+            cell.setCellValue((String) value);
+        } else if (value instanceof Double) {
+            cell.setCellValue((Double) value);
+        } else if (value instanceof Boolean) {
+            cell.setCellValue((Boolean) value);
+        } else {
+            cell.setCellValue(value.toString());
+        }
+    }
+
+    public int getRowCount(Sheet sheet) {
+        return sheet.getPhysicalNumberOfRows();
+    }
+
+    public int getColumnCount(Sheet sheet) {
+        return sheet.getRow(0).getPhysicalNumberOfCells();
+    }
+}

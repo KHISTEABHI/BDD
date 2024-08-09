@@ -1,0 +1,11 @@
+Feature: feature1
+
+  @Test1
+  Scenario: User is on login page "<testCaseId>"
+    Given user have code and feature file
+    When user clicks on run button
+    Then the program will execute
+
+ Examples:
+|				testCaseId			|
+|	Login to application	|

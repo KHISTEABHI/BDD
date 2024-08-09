@@ -1,0 +1,11 @@
+Feature: feature1
+
+  @Test1
+  Scenario: Lets run a test case
+    Given user have code and feature file
+    When user clicks on run button
+    Then the program will execute
+
+ Examples:
+|				testCaseId			|
+|	Login to application	|
